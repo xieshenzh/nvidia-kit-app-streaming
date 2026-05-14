@@ -1,0 +1,649 @@
+{
+  "results": [
+    {
+      "metadata": {
+        "id": "29465265-5152-45bd-b02d-b0281a65fb68",
+        "additionalInfo": {
+          "name": "client",
+          "namespace": "isaac-lab-streaming",
+          "type": "Deployment"
+        }
+      },
+      "summary": {
+        "CRITICAL": 0,
+        "HIGH": 0,
+        "LOW": 6,
+        "MEDIUM": 3,
+        "TOTAL": 9
+      },
+      "violatedPolicies": [
+        {
+          "name": "Container using read-write root filesystem",
+          "severity": "MEDIUM",
+          "description": "Alert on deployments with containers with read-write root filesystem",
+          "violation": [
+            "Container 'nginx' uses a read-write root filesystem"
+          ],
+          "remediation": "Use a read-only root filesystem, and use volume mounts to allow writes to specific sub-directories depending on your application's needs.",
+          "failingCheck": false
+        },
+        {
+          "name": "Container with privilege escalation allowed",
+          "severity": "MEDIUM",
+          "description": "Alerts if a deployment has containers with allowPrivilegeEscalation set to true in its security context.",
+          "violation": [
+            "Container 'nginx' allows privilege escalation"
+          ],
+          "remediation": "Verify that privileged escalation is required and cannot be provided with a subset of other controls. Disable privilege escalation by setting allowPrivilegeEscalation to false.",
+          "failingCheck": false
+        },
+        {
+          "name": "Pod Service Account Token Automatically Mounted",
+          "severity": "MEDIUM",
+          "description": "Protect pod default service account tokens from compromise by minimizing the mounting of the default service account token to only those pods whose application requires interaction with the Kubernetes API.",
+          "violation": [
+            "Deployment mounts the service account tokens.",
+            "Namespace has name 'isaac-lab-streaming'",
+            "Service Account is set to 'default'"
+          ],
+          "remediation": "Add `automountServiceAccountToken: false` or a value distinct from 'default' for the `serviceAccountName` key to the deployment's Pod configuration.",
+          "failingCheck": false
+        },
+        {
+          "name": "Drop All Capabilities",
+          "severity": "LOW",
+          "description": "Alert when a deployment does not drop all capabilities.",
+          "violation": [
+            "Container 'nginx' does not drop expected capabilities (drops no capabilities)"
+          ],
+          "remediation": "Ensure that the deployment manifest has `drop: ALL` in the securityContext section of the container manifest.",
+          "failingCheck": false
+        },
+        {
+          "name": "Red Hat Package Manager in Image",
+          "severity": "LOW",
+          "description": "Alert on deployments with components of the Red Hat/Fedora/CentOS package management system.",
+          "violation": [
+            "Container 'nginx' includes component 'dnf' (version 4.14.0-31.el9)",
+            "Container 'nginx' includes component 'rpm' (version 4.16.1.3-39.el9)",
+            "Container 'nginx' includes component 'yum' (version 4.14.0-31.el9)"
+          ],
+          "remediation": "Run `rpm -e --nodeps $(rpm -qa '*rpm*' '*dnf*' '*libsolv*' '*hawkey*' 'yum*')` in the image build for production containers.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Annotation: Email",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'email' annotation",
+          "violation": [
+            "Required annotation not found (found annotations: <empty>)"
+          ],
+          "remediation": "Redeploy your service and set the 'email' annotation as your email or your team's email.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Annotation: Owner/Team",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'owner' or 'team' annotation",
+          "violation": [
+            "Required annotation not found (found annotations: <empty>)"
+          ],
+          "remediation": "Redeploy your service and set the 'owner' or 'team' annotation to yourself or your team respectively per organizational standards.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Image Label",
+          "severity": "LOW",
+          "description": "Alert on deployments with images missing the specified label.",
+          "violation": [
+            "Required label not found (found labels: architecture=aarch64, build-date=2026-05-13T04:44:00Z, com.redhat.component=nginx-124-container and 24 more)"
+          ],
+          "remediation": "Request that the maintainer add the required label to the image.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Label: Owner/Team",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'owner' or 'team' label",
+          "violation": [
+            "Required label not found (found labels: app.kubernetes.io/managed-by=Helm, app.kubernetes.io/name=client, app.kubernetes.io/part-of=isaac-sim-streaming and 1 more)"
+          ],
+          "remediation": "Redeploy your service and set the 'owner' or 'team' label to yourself or your team respectively per organizational standards.",
+          "failingCheck": false
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "9ab3175d-ad0e-448d-8e67-b9bc07860d4f",
+        "additionalInfo": {
+          "name": "coturn",
+          "namespace": "isaac-lab-streaming",
+          "type": "Deployment"
+        }
+      },
+      "summary": {
+        "CRITICAL": 0,
+        "HIGH": 3,
+        "LOW": 7,
+        "MEDIUM": 2,
+        "TOTAL": 12
+      },
+      "violatedPolicies": [
+        {
+          "name": "Fixable CVSS >= 7",
+          "severity": "HIGH",
+          "description": "Alert on deployments with fixable vulnerabilities with a CVSS of at least 7",
+          "violation": [
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.4-1~deb13u2",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.4-1~deb13u2",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.4-1~deb13u2",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-3104 (CVSS 7.5) (severity Important) found in component 'bind9-dnsutils' (version 1:9.20.15-1~deb13u1) in container 'coturn', resolved by version 1:9.20.21-1~deb13u1",
+            "Fixable CVE-2026-3104 (CVSS 7.5) (severity Important) found in component 'bind9-host' (version 1:9.20.15-1~deb13u1) in container 'coturn', resolved by version 1:9.20.21-1~deb13u1",
+            "Fixable CVE-2026-3104 (CVSS 7.5) (severity Important) found in component 'bind9-libs' (version 1:9.20.15-1~deb13u1) in container 'coturn', resolved by version 1:9.20.21-1~deb13u1",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-32710 (CVSS 9.9) (severity Critical) found in component 'libmariadb3' (version 1:11.8.3-0+deb13u1) in container 'coturn', resolved by version 1:11.8.6-0+deb13u1",
+            "Fixable CVE-2026-32710 (CVSS 9.9) (severity Critical) found in component 'mariadb-common' (version 1:11.8.3-0+deb13u1) in container 'coturn', resolved by version 1:11.8.6-0+deb13u1"
+          ],
+          "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.",
+          "failingCheck": false
+        },
+        {
+          "name": "Fixable Severity at least Important",
+          "severity": "HIGH",
+          "description": "Alert on deployments with fixable vulnerabilities with a Severity Rating at least Important",
+          "violation": [
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.4-1~deb13u2",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.4-1~deb13u2",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.4-1~deb13u2",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-3104 (CVSS 7.5) (severity Important) found in component 'bind9-dnsutils' (version 1:9.20.15-1~deb13u1) in container 'coturn', resolved by version 1:9.20.21-1~deb13u1",
+            "Fixable CVE-2026-3104 (CVSS 7.5) (severity Important) found in component 'bind9-host' (version 1:9.20.15-1~deb13u1) in container 'coturn', resolved by version 1:9.20.21-1~deb13u1",
+            "Fixable CVE-2026-3104 (CVSS 7.5) (severity Important) found in component 'bind9-libs' (version 1:9.20.15-1~deb13u1) in container 'coturn', resolved by version 1:9.20.21-1~deb13u1",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'libssl3t64' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'openssl' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'openssl-provider-legacy' (version 3.5.4-1~deb13u1) in container 'coturn', resolved by version 3.5.5-1~deb13u2",
+            "Fixable CVE-2026-32710 (CVSS 9.9) (severity Critical) found in component 'libmariadb3' (version 1:11.8.3-0+deb13u1) in container 'coturn', resolved by version 1:11.8.6-0+deb13u1",
+            "Fixable CVE-2026-32710 (CVSS 9.9) (severity Critical) found in component 'mariadb-common' (version 1:11.8.3-0+deb13u1) in container 'coturn', resolved by version 1:11.8.6-0+deb13u1"
+          ],
+          "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.",
+          "failingCheck": false
+        },
+        {
+          "name": "Secret Mounted as Environment Variable",
+          "severity": "HIGH",
+          "description": "Alert on deployments with Kubernetes secret mounted as environment variable",
+          "violation": [
+            "Environment variable 'TURN_PASSWORD' is present in container 'coturn' and references a Secret"
+          ],
+          "remediation": "Migrate your secrets from environment variables to your security team's secret management solution.",
+          "failingCheck": false
+        },
+        {
+          "name": "Container using read-write root filesystem",
+          "severity": "MEDIUM",
+          "description": "Alert on deployments with containers with read-write root filesystem",
+          "violation": [
+            "Container 'coturn' uses a read-write root filesystem"
+          ],
+          "remediation": "Use a read-only root filesystem, and use volume mounts to allow writes to specific sub-directories depending on your application's needs.",
+          "failingCheck": false
+        },
+        {
+          "name": "Container with privilege escalation allowed",
+          "severity": "MEDIUM",
+          "description": "Alerts if a deployment has containers with allowPrivilegeEscalation set to true in its security context.",
+          "violation": [
+            "Container 'coturn' allows privilege escalation"
+          ],
+          "remediation": "Verify that privileged escalation is required and cannot be provided with a subset of other controls. Disable privilege escalation by setting allowPrivilegeEscalation to false.",
+          "failingCheck": false
+        },
+        {
+          "name": "90-Day Image Age",
+          "severity": "LOW",
+          "description": "Alert on deployments with images that haven't been updated in 90 days",
+          "violation": [
+            "Container 'coturn' has image created at 2025-12-18 14:30:10 (UTC)"
+          ],
+          "remediation": "Rebuild your image, push a new minor version (with a new immutable tag), and update your service to use it.",
+          "failingCheck": false
+        },
+        {
+          "name": "Drop All Capabilities",
+          "severity": "LOW",
+          "description": "Alert when a deployment does not drop all capabilities.",
+          "violation": [
+            "Container 'coturn' does not drop expected capabilities (drops no capabilities)"
+          ],
+          "remediation": "Ensure that the deployment manifest has `drop: ALL` in the securityContext section of the container manifest.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Annotation: Email",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'email' annotation",
+          "violation": [
+            "Required annotation not found (found annotations: <empty>)"
+          ],
+          "remediation": "Redeploy your service and set the 'email' annotation as your email or your team's email.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Annotation: Owner/Team",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'owner' or 'team' annotation",
+          "violation": [
+            "Required annotation not found (found annotations: <empty>)"
+          ],
+          "remediation": "Redeploy your service and set the 'owner' or 'team' annotation to yourself or your team respectively per organizational standards.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Image Label",
+          "severity": "LOW",
+          "description": "Alert on deployments with images missing the specified label.",
+          "violation": [
+            "Required label not found (found labels: org.opencontainers.image.revision=6a0b3a648a0c53efa4b99c5b7034e09fbf66ae52, org.opencontainers.image.source=https://github.com/coturn/coturn, org.opencontainers.image.version=4.7.0-r4)"
+          ],
+          "remediation": "Request that the maintainer add the required label to the image.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Label: Owner/Team",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'owner' or 'team' label",
+          "violation": [
+            "Required label not found (found labels: app.kubernetes.io/managed-by=Helm, app.kubernetes.io/name=coturn, app.kubernetes.io/part-of=isaac-sim-streaming and 1 more)"
+          ],
+          "remediation": "Redeploy your service and set the 'owner' or 'team' label to yourself or your team respectively per organizational standards.",
+          "failingCheck": false
+        },
+        {
+          "name": "Ubuntu Package Manager in Image",
+          "severity": "LOW",
+          "description": "Alert on deployments with components of the Debian/Ubuntu package management system in the image.",
+          "violation": [
+            "Container 'coturn' includes component 'apt' (version 3.0.3)",
+            "Container 'coturn' includes component 'dpkg' (version 1.22.21)"
+          ],
+          "remediation": "Run `dpkg -r --force-all apt apt-get && dpkg -r --force-all debconf dpkg` in the image build for production containers.",
+          "failingCheck": false
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "id": "a82f521c-4d84-4993-a803-2765ca535617",
+        "additionalInfo": {
+          "name": "isaac-sim",
+          "namespace": "isaac-lab-streaming",
+          "type": "Deployment"
+        }
+      },
+      "summary": {
+        "CRITICAL": 0,
+        "HIGH": 2,
+        "LOW": 12,
+        "MEDIUM": 2,
+        "TOTAL": 16
+      },
+      "violatedPolicies": [
+        {
+          "name": "Fixable CVSS >= 7",
+          "severity": "HIGH",
+          "description": "Alert on deployments with fixable vulnerabilities with a CVSS of at least 7",
+          "violation": [
+            "Fixable CVE-2025-27516 (CVSS 8.8) (severity Moderate) found in component 'jinja2' (version 3.1.5) in container 'isaac-sim', resolved by version 3.1.6",
+            "Fixable CVE-2025-32414 (CVSS 7.5) (severity Important) found in component 'libxml2' (version 2.13.4-r5) in container 'tls-proxy', resolved by version 2.13.4-r6",
+            "Fixable CVE-2025-32415 (CVSS 7.5) (severity Important) found in component 'libxml2' (version 2.13.4-r5) in container 'tls-proxy', resolved by version 2.13.4-r6",
+            "Fixable CVE-2025-62727 (CVSS 7.5) (severity Important) found in component 'starlette' (version 0.48.0) in container 'isaac-sim', resolved by version 0.49.1",
+            "Fixable CVE-2025-69223 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69223 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69227 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69227 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69228 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69228 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.6-r0",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.6-r0",
+            "Fixable CVE-2026-22184 (CVSS 7.8) (severity Important) found in component 'zlib' (version 1.3.1-r2) in container 'tls-proxy', resolved by version 1.3.2-r0",
+            "Fixable CVE-2026-22695 (CVSS 7.1) (severity Important) found in component 'libpng' (version 1.6.47-r0) in container 'tls-proxy', resolved by version 1.6.54-r0",
+            "Fixable CVE-2026-22801 (CVSS 7.8) (severity Important) found in component 'libpng' (version 1.6.47-r0) in container 'tls-proxy', resolved by version 1.6.54-r0",
+            "Fixable CVE-2026-25210 (CVSS 7.8) (severity Important) found in component 'libexpat' (version 2.7.0-r0) in container 'tls-proxy', resolved by version 2.7.4-r0",
+            "Fixable CVE-2026-25646 (CVSS 8.1) (severity Important) found in component 'libpng' (version 1.6.47-r0) in container 'tls-proxy', resolved by version 1.6.55-r0",
+            "Fixable CVE-2026-25990 (CVSS 7.5) (severity Important) found in component 'pillow' (version 11.3.0) in container 'isaac-sim', resolved by version 12.1.1",
+            "Fixable CVE-2026-26209 (CVSS 7.5) (severity Important) found in component 'cbor2' (version 5.8.0) in container 'isaac-sim', resolved by version 5.9.0",
+            "Fixable CVE-2026-27489 (CVSS 7.5) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Low) found in component 'libssl3t64' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Low) found in component 'openssl' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Low) found in component 'libssl3t64' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Low) found in component 'openssl' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Low) found in component 'libssl3t64' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Low) found in component 'openssl' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Low) found in component 'libssl3t64' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Low) found in component 'openssl' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-28500 (CVSS 8.6) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Low) found in component 'libssl3t64' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Low) found in component 'openssl' (version 3.0.13-0ubuntu3.7) in container 'isaac-sim', resolved by version 0:3.0.13-0ubuntu3.9",
+            "Fixable CVE-2026-32281 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.2",
+            "Fixable CVE-2026-32283 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.2",
+            "Fixable CVE-2026-32597 (CVSS 7.5) (severity Important) found in component 'pyjwt' (version 2.10.1) in container 'isaac-sim', resolved by version 2.12.0",
+            "Fixable CVE-2026-33186 (CVSS 9.1) (severity Critical) found in component 'google.golang.org/grpc' (version v1.79.2) in container 'isaac-sim', resolved by version 1.79.3",
+            "Fixable CVE-2026-33810 (CVSS 8.2) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.2",
+            "Fixable CVE-2026-33811 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-33814 (CVSS 7.5) (severity Important) found in component 'golang.org/x/net' (version v0.51.0) in container 'isaac-sim', resolved by version 0.53.0",
+            "Fixable CVE-2026-33814 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-34070 (CVSS 7.5) (severity Important) found in component 'langchain-core' (version 1.2.18) in container 'isaac-sim', resolved by version 1.2.22",
+            "Fixable CVE-2026-34445 (CVSS 8.6) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0",
+            "Fixable CVE-2026-34480 (CVSS 7.5) (severity Moderate) found in component 'org.apache.logging.log4j:log4j-core' (version 2.17.1) in container 'isaac-sim', resolved by version 2.25.4",
+            "Fixable CVE-2026-34513 (CVSS 7.5) (severity Low) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34513 (CVSS 7.5) (severity Low) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34513 (CVSS 7.5) (severity Low) found in component 'aiohttp' (version 3.13.3) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34515 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34515 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34515 (CVSS 7.5) (severity Moderate) found in component 'aiohttp' (version 3.13.3) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34516 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34516 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34516 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.13.3) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34520 (CVSS 9.1) (severity Critical) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34520 (CVSS 9.1) (severity Critical) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34520 (CVSS 9.1) (severity Critical) found in component 'aiohttp' (version 3.13.3) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-3731 (CVSS 7.5) (severity Moderate) found in component 'libssh-4' (version 0.10.6-2ubuntu0.3) in container 'isaac-sim', resolved by version 0:0.10.6-2ubuntu0.4",
+            "Fixable CVE-2026-39820 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-39836 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-39883 (CVSS 7) (severity Important) found in component 'go.opentelemetry.io/otel/sdk' (version v1.42.0) in container 'isaac-sim', resolved by version 1.43.0",
+            "Fixable CVE-2026-39892 (CVSS 9.8) (severity Moderate) found in component 'cryptography' (version 46.0.5) in container 'isaac-sim', resolved by version 46.0.7",
+            "Fixable CVE-2026-40192 (CVSS 7.5) (severity Important) found in component 'pillow' (version 11.3.0) in container 'isaac-sim', resolved by version 12.2.0",
+            "Fixable CVE-2026-40192 (CVSS 7.5) (severity Important) found in component 'pillow' (version 12.1.1) in container 'isaac-sim', resolved by version 12.2.0",
+            "Fixable CVE-2026-41066 (CVSS 7.5) (severity Important) found in component 'lxml' (version 4.9.4) in container 'isaac-sim', resolved by version 6.1.0",
+            "Fixable CVE-2026-41066 (CVSS 7.5) (severity Important) found in component 'lxml' (version 6.0.2) in container 'isaac-sim', resolved by version 6.1.0",
+            "Fixable CVE-2026-41602 (CVSS 7.5) (severity Important) found in component 'github.com/apache/thrift' (version v0.22.0) in container 'isaac-sim', resolved by version 0.23.0",
+            "Fixable CVE-2026-42215 (CVSS 8.8) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.47",
+            "Fixable CVE-2026-42284 (CVSS 8.1) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.47",
+            "Fixable CVE-2026-42561 (CVSS 7.5) (severity Important) found in component 'python-multipart' (version 0.0.22) in container 'isaac-sim', resolved by version 0.0.27",
+            "Fixable CVE-2026-44243 (CVSS 7.1) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.48",
+            "Fixable CVE-2026-44244 (CVSS 7.8) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.49",
+            "Fixable CVE-2026-44843 (CVSS 8.2) (severity Important) found in component 'langchain-core' (version 1.2.18) in container 'isaac-sim', resolved by version 1.3.3",
+            "Fixable CVE-2026-45134 (CVSS 7.1) (severity Important) found in component 'langchain-classic' (version 1.0.2) in container 'isaac-sim', resolved by version 1.0.7",
+            "Fixable CVE-2026-45134 (CVSS 7.1) (severity Important) found in component 'langsmith' (version 0.7.16) in container 'isaac-sim', resolved by version 0.6.0",
+            "Fixable CVE-2026-45134 (CVSS 7.1) (severity Important) found in component 'langsmith' (version 0.7.16) in container 'isaac-sim', resolved by version 0.8.0",
+            "Fixable CVE-2026-4878 (CVSS 7) (severity Moderate) found in component 'libcap2' (version 1:2.66-5ubuntu2.2) in container 'isaac-sim', resolved by version 1:2.66-5ubuntu2.4",
+            "Fixable CVE-2026-5773 (CVSS 7.5) (severity Low) found in component 'curl' (version 8.5.0-2ubuntu10.8) in container 'isaac-sim', resolved by version 0:8.5.0-2ubuntu10.9",
+            "Fixable CVE-2026-5773 (CVSS 7.5) (severity Low) found in component 'libcurl3t64-gnutls' (version 8.5.0-2ubuntu10.8) in container 'isaac-sim', resolved by version 0:8.5.0-2ubuntu10.9",
+            "Fixable CVE-2026-5773 (CVSS 7.5) (severity Low) found in component 'libcurl4t64' (version 8.5.0-2ubuntu10.8) in container 'isaac-sim', resolved by version 0:8.5.0-2ubuntu10.9",
+            "Fixable GHSA-mv93-w799-cj2w (CVSS 7) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.50",
+            "Fixable GHSA-q56x-g2fj-4rj6 (CVSS 7.1) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0"
+          ],
+          "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.",
+          "failingCheck": false
+        },
+        {
+          "name": "Fixable Severity at least Important",
+          "severity": "HIGH",
+          "description": "Alert on deployments with fixable vulnerabilities with a Severity Rating at least Important",
+          "violation": [
+            "Fixable CVE-2025-32414 (CVSS 7.5) (severity Important) found in component 'libxml2' (version 2.13.4-r5) in container 'tls-proxy', resolved by version 2.13.4-r6",
+            "Fixable CVE-2025-32415 (CVSS 7.5) (severity Important) found in component 'libxml2' (version 2.13.4-r5) in container 'tls-proxy', resolved by version 2.13.4-r6",
+            "Fixable CVE-2025-62727 (CVSS 7.5) (severity Important) found in component 'starlette' (version 0.48.0) in container 'isaac-sim', resolved by version 0.49.1",
+            "Fixable CVE-2025-69223 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69223 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.3",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.6-r0",
+            "Fixable CVE-2025-69421 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.6-r0",
+            "Fixable CVE-2026-22184 (CVSS 7.8) (severity Important) found in component 'zlib' (version 1.3.1-r2) in container 'tls-proxy', resolved by version 1.3.2-r0",
+            "Fixable CVE-2026-22695 (CVSS 7.1) (severity Important) found in component 'libpng' (version 1.6.47-r0) in container 'tls-proxy', resolved by version 1.6.54-r0",
+            "Fixable CVE-2026-22801 (CVSS 7.8) (severity Important) found in component 'libpng' (version 1.6.47-r0) in container 'tls-proxy', resolved by version 1.6.54-r0",
+            "Fixable CVE-2026-25210 (CVSS 7.8) (severity Important) found in component 'libexpat' (version 2.7.0-r0) in container 'tls-proxy', resolved by version 2.7.4-r0",
+            "Fixable CVE-2026-25646 (CVSS 8.1) (severity Important) found in component 'libpng' (version 1.6.47-r0) in container 'tls-proxy', resolved by version 1.6.55-r0",
+            "Fixable CVE-2026-25990 (CVSS 7.5) (severity Important) found in component 'pillow' (version 11.3.0) in container 'isaac-sim', resolved by version 12.1.1",
+            "Fixable CVE-2026-26209 (CVSS 7.5) (severity Important) found in component 'cbor2' (version 5.8.0) in container 'isaac-sim', resolved by version 5.9.0",
+            "Fixable CVE-2026-27489 (CVSS 7.5) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28387 (CVSS 8.1) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28388 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28389 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28390 (CVSS 7.5) (severity Important) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-28500 (CVSS 8.6) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'libcrypto3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-31789 (CVSS 9.8) (severity Critical) found in component 'libssl3' (version 3.3.3-r0) in container 'tls-proxy', resolved by version 3.3.7-r0",
+            "Fixable CVE-2026-32281 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.2",
+            "Fixable CVE-2026-32283 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.2",
+            "Fixable CVE-2026-32597 (CVSS 7.5) (severity Important) found in component 'pyjwt' (version 2.10.1) in container 'isaac-sim', resolved by version 2.12.0",
+            "Fixable CVE-2026-33186 (CVSS 9.1) (severity Critical) found in component 'google.golang.org/grpc' (version v1.79.2) in container 'isaac-sim', resolved by version 1.79.3",
+            "Fixable CVE-2026-33810 (CVSS 8.2) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.2",
+            "Fixable CVE-2026-33811 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-33814 (CVSS 7.5) (severity Important) found in component 'golang.org/x/net' (version v0.51.0) in container 'isaac-sim', resolved by version 0.53.0",
+            "Fixable CVE-2026-33814 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-34070 (CVSS 7.5) (severity Important) found in component 'langchain-core' (version 1.2.18) in container 'isaac-sim', resolved by version 1.2.22",
+            "Fixable CVE-2026-34445 (CVSS 8.6) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0",
+            "Fixable CVE-2026-34516 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34516 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34516 (CVSS 7.5) (severity Important) found in component 'aiohttp' (version 3.13.3) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34520 (CVSS 9.1) (severity Critical) found in component 'aiohttp' (version 3.12.14) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34520 (CVSS 9.1) (severity Critical) found in component 'aiohttp' (version 3.13.2) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-34520 (CVSS 9.1) (severity Critical) found in component 'aiohttp' (version 3.13.3) in container 'isaac-sim', resolved by version 3.13.4",
+            "Fixable CVE-2026-39820 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-39836 (CVSS 7.5) (severity Important) found in component 'stdlib' (version 1.26.1) in container 'isaac-sim', resolved by version 1.26.3",
+            "Fixable CVE-2026-39883 (CVSS 7) (severity Important) found in component 'go.opentelemetry.io/otel/sdk' (version v1.42.0) in container 'isaac-sim', resolved by version 1.43.0",
+            "Fixable CVE-2026-40192 (CVSS 7.5) (severity Important) found in component 'pillow' (version 11.3.0) in container 'isaac-sim', resolved by version 12.2.0",
+            "Fixable CVE-2026-40192 (CVSS 7.5) (severity Important) found in component 'pillow' (version 12.1.1) in container 'isaac-sim', resolved by version 12.2.0",
+            "Fixable CVE-2026-41066 (CVSS 7.5) (severity Important) found in component 'lxml' (version 4.9.4) in container 'isaac-sim', resolved by version 6.1.0",
+            "Fixable CVE-2026-41066 (CVSS 7.5) (severity Important) found in component 'lxml' (version 6.0.2) in container 'isaac-sim', resolved by version 6.1.0",
+            "Fixable CVE-2026-41486 (CVSS 0) (severity Important) found in component 'ray' (version 2.52.1) in container 'isaac-sim', resolved by version 2.55.0",
+            "Fixable CVE-2026-41602 (CVSS 7.5) (severity Important) found in component 'github.com/apache/thrift' (version v0.22.0) in container 'isaac-sim', resolved by version 0.23.0",
+            "Fixable CVE-2026-42215 (CVSS 8.8) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.47",
+            "Fixable CVE-2026-42284 (CVSS 8.1) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.47",
+            "Fixable CVE-2026-42311 (CVSS 0) (severity Important) found in component 'pillow' (version 11.3.0) in container 'isaac-sim', resolved by version 12.2.0",
+            "Fixable CVE-2026-42311 (CVSS 0) (severity Important) found in component 'pillow' (version 12.1.1) in container 'isaac-sim', resolved by version 12.2.0",
+            "Fixable CVE-2026-42561 (CVSS 7.5) (severity Important) found in component 'python-multipart' (version 0.0.22) in container 'isaac-sim', resolved by version 0.0.27",
+            "Fixable CVE-2026-44243 (CVSS 7.1) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.48",
+            "Fixable CVE-2026-44244 (CVSS 7.8) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.49",
+            "Fixable CVE-2026-44431 (CVSS 0) (severity Important) found in component 'urllib3' (version 2.6.3) in container 'isaac-sim', resolved by version 2.7.0",
+            "Fixable CVE-2026-44432 (CVSS 0) (severity Important) found in component 'urllib3' (version 2.6.3) in container 'isaac-sim', resolved by version 2.7.0",
+            "Fixable CVE-2026-44843 (CVSS 8.2) (severity Important) found in component 'langchain-core' (version 1.2.18) in container 'isaac-sim', resolved by version 1.3.3",
+            "Fixable CVE-2026-45022 (CVSS 0) (severity Important) found in component 'github.com/go-git/go-git/v5' (version v5.17.0) in container 'isaac-sim', resolved by version 5.19.0",
+            "Fixable CVE-2026-45134 (CVSS 7.1) (severity Important) found in component 'langchain-classic' (version 1.0.2) in container 'isaac-sim', resolved by version 1.0.7",
+            "Fixable CVE-2026-45134 (CVSS 7.1) (severity Important) found in component 'langsmith' (version 0.7.16) in container 'isaac-sim', resolved by version 0.6.0",
+            "Fixable CVE-2026-45134 (CVSS 7.1) (severity Important) found in component 'langsmith' (version 0.7.16) in container 'isaac-sim', resolved by version 0.8.0",
+            "Fixable GHSA-mv93-w799-cj2w (CVSS 7) (severity Important) found in component 'gitpython' (version 3.1.46) in container 'isaac-sim', resolved by version 3.1.50",
+            "Fixable GHSA-q56x-g2fj-4rj6 (CVSS 7.1) (severity Important) found in component 'onnx' (version 1.20.1) in container 'isaac-sim', resolved by version 1.21.0"
+          ],
+          "remediation": "Use your package manager to update to a fixed version in future builds or speak with your security team to mitigate the vulnerabilities.",
+          "failingCheck": false
+        },
+        {
+          "name": "Container using read-write root filesystem",
+          "severity": "MEDIUM",
+          "description": "Alert on deployments with containers with read-write root filesystem",
+          "violation": [
+            "Container 'isaac-sim' uses a read-write root filesystem",
+            "Container 'tls-proxy' uses a read-write root filesystem"
+          ],
+          "remediation": "Use a read-only root filesystem, and use volume mounts to allow writes to specific sub-directories depending on your application's needs.",
+          "failingCheck": false
+        },
+        {
+          "name": "Container with privilege escalation allowed",
+          "severity": "MEDIUM",
+          "description": "Alerts if a deployment has containers with allowPrivilegeEscalation set to true in its security context.",
+          "violation": [
+            "Container 'isaac-sim' allows privilege escalation",
+            "Container 'tls-proxy' allows privilege escalation"
+          ],
+          "remediation": "Verify that privileged escalation is required and cannot be provided with a subset of other controls. Disable privilege escalation by setting allowPrivilegeEscalation to false.",
+          "failingCheck": false
+        },
+        {
+          "name": "90-Day Image Age",
+          "severity": "LOW",
+          "description": "Alert on deployments with images that haven't been updated in 90 days",
+          "violation": [
+            "Container 'tls-proxy' has image created at 2025-04-16 14:50:31 (UTC)"
+          ],
+          "remediation": "Rebuild your image, push a new minor version (with a new immutable tag), and update your service to use it.",
+          "failingCheck": false
+        },
+        {
+          "name": "ADD Command used instead of COPY",
+          "severity": "LOW",
+          "description": "Alert on deployments using an ADD command",
+          "violation": [
+            "Dockerfile line 'ADD alpine-minirootfs-3.21.3-x86_64....' found in container 'tls-proxy'",
+            "Dockerfile line 'ADD file:ddf1aa62235de6657123492b19d...' found in container 'isaac-sim'"
+          ],
+          "remediation": "Replace ADD with COPY when adding new files to the image. Per https://docs.docker.com/develop/develop-images/dockerfile_best-practices, it is better to use RUN curl instead of ADD if you need to access a URL.",
+          "failingCheck": false
+        },
+        {
+          "name": "Alpine Linux Package Manager (apk) in Image",
+          "severity": "LOW",
+          "description": "Alert on deployments with the Alpine Linux package manager (apk) present",
+          "violation": [
+            "Container 'tls-proxy' includes component 'apk-tools' (version 2.14.6-r3)"
+          ],
+          "remediation": "Run `apk --purge del apk-tools` in the image build for production containers.",
+          "failingCheck": false
+        },
+        {
+          "name": "Curl in Image",
+          "severity": "LOW",
+          "description": "Alert on deployments with curl present",
+          "violation": [
+            "Container 'isaac-sim' includes component 'curl' (version 8.5.0-2ubuntu10.8)",
+            "Container 'tls-proxy' includes component 'curl' (version 8.12.1-r1)"
+          ],
+          "remediation": "Use your package manager's \"remove\", \"purge\" or \"erase\" command to remove curl from the image build for production containers. Ensure that any configuration files are also removed.",
+          "failingCheck": false
+        },
+        {
+          "name": "Docker CIS 4.1: Ensure That a User for the Container Has Been Created",
+          "severity": "LOW",
+          "description": "Containers should run as a non-root user",
+          "violation": [
+            "Container 'isaac-sim' has image with user 'root'",
+            "Container 'tls-proxy' has image with user 'root'"
+          ],
+          "remediation": "Ensure that the Dockerfile for each container switches from the root user",
+          "failingCheck": false
+        },
+        {
+          "name": "Drop All Capabilities",
+          "severity": "LOW",
+          "description": "Alert when a deployment does not drop all capabilities.",
+          "violation": [
+            "Container 'isaac-sim' does not drop expected capabilities (drops no capabilities)",
+            "Container 'tls-proxy' does not drop expected capabilities (drops no capabilities)"
+          ],
+          "remediation": "Ensure that the deployment manifest has `drop: ALL` in the securityContext section of the container manifest.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Annotation: Email",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'email' annotation",
+          "violation": [
+            "Required annotation not found (found annotations: <empty>)"
+          ],
+          "remediation": "Redeploy your service and set the 'email' annotation as your email or your team's email.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Annotation: Owner/Team",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'owner' or 'team' annotation",
+          "violation": [
+            "Required annotation not found (found annotations: <empty>)"
+          ],
+          "remediation": "Redeploy your service and set the 'owner' or 'team' annotation to yourself or your team respectively per organizational standards.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Image Label",
+          "severity": "LOW",
+          "description": "Alert on deployments with images missing the specified label.",
+          "violation": [
+            "Required label not found (found labels: description=Dockerfile for building and running the Isaac Lab framework insi, org.opencontainers.image.ref.name=ubuntu, org.opencontainers.image.version=24.04 and 1 more)",
+            "Required label not found (found labels: maintainer=NGINX Docker Maintainers <docker-maint@nginx.com>)"
+          ],
+          "remediation": "Request that the maintainer add the required label to the image.",
+          "failingCheck": false
+        },
+        {
+          "name": "Required Label: Owner/Team",
+          "severity": "LOW",
+          "description": "Alert on deployments missing the 'owner' or 'team' label",
+          "violation": [
+            "Required label not found (found labels: app.kubernetes.io/managed-by=Helm, app.kubernetes.io/name=isaac-sim, app.kubernetes.io/part-of=isaac-sim-streaming and 1 more)"
+          ],
+          "remediation": "Redeploy your service and set the 'owner' or 'team' label to yourself or your team respectively per organizational standards.",
+          "failingCheck": false
+        },
+        {
+          "name": "Ubuntu Package Manager in Image",
+          "severity": "LOW",
+          "description": "Alert on deployments with components of the Debian/Ubuntu package management system in the image.",
+          "violation": [
+            "Container 'isaac-sim' includes component 'apt' (version 2.8.3)",
+            "Container 'isaac-sim' includes component 'dpkg' (version 1.22.6ubuntu6.5)"
+          ],
+          "remediation": "Run `dpkg -r --force-all apt apt-get && dpkg -r --force-all debconf dpkg` in the image build for production containers.",
+          "failingCheck": false
+        },
+        {
+          "name": "Wget in Image",
+          "severity": "LOW",
+          "description": "Alert on deployments with wget present",
+          "violation": [
+            "Container 'isaac-sim' includes component 'wget' (version 1.21.4-1ubuntu4.1)"
+          ],
+          "remediation": "Use your package manager's \"remove\" command to remove wget from the image build for production containers.",
+          "failingCheck": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "CRITICAL": 0,
+    "HIGH": 5,
+    "LOW": 25,
+    "MEDIUM": 7,
+    "TOTAL": 37
+  }
+}
