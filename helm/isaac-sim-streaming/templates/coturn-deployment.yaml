@@ -20,23 +20,26 @@ spec:
         app.kubernetes.io/name: coturn
     spec:
       serviceAccountName: coturn
+      automountServiceAccountToken: false
       containers:
         - name: coturn
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           image: {{ .Values.coturn.image.repository }}:{{ .Values.coturn.image.tag }}
           command:
             - /bin/sh
             - -c
             - |
               set -e
+              TURN_PASSWORD=$(cat /etc/coturn/auth/password)
               sed "s|TURN_PASSWORD_PLACEHOLDER|${TURN_PASSWORD}|g" \
                 /etc/coturn/config/turnserver.conf > /tmp/turnserver.conf
               exec turnserver -c /tmp/turnserver.conf
-          env:
-            - name: TURN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: coturn-auth
-                  key: password
           ports:
             - name: turn
               containerPort: 3478
@@ -51,6 +54,11 @@ spec:
             - name: tls
               mountPath: /etc/coturn/tls
               readOnly: true
+            - name: auth
+              mountPath: /etc/coturn/auth
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
           resources:
             requests:
               cpu: {{ .Values.coturn.resources.requests.cpu }}
@@ -65,3 +73,8 @@ spec:
         - name: tls
           secret:
             secretName: coturn-tls
+        - name: auth
+          secret:
+            secretName: coturn-auth
+        - name: tmp
+          emptyDir: {}

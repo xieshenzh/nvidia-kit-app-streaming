@@ -17,8 +17,16 @@ spec:
       labels:
         app.kubernetes.io/name: client
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: nginx
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           image: {{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}
           imagePullPolicy: {{ .Values.client.image.pullPolicy }}
           ports:
@@ -33,6 +41,16 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
               readOnly: true
+            - name: tmp
+              mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+            - name: nginx-log
+              mountPath: /var/log/nginx
+            - name: nginx-lib
+              mountPath: /var/lib/nginx
           readinessProbe:
             httpGet:
               path: /
@@ -59,3 +77,13 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
+        - name: tmp
+          emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+        - name: nginx-log
+          emptyDir: {}
+        - name: nginx-lib
+          emptyDir: {}

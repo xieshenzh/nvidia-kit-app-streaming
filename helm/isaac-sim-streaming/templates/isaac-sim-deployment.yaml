@@ -20,9 +20,15 @@ spec:
         app.kubernetes.io/name: isaac-sim
     spec:
       serviceAccountName: isaac-sim
-      {{- if .Values.ngc.apiKey }}
+      automountServiceAccountToken: false
+      {{- if or .Values.ngc.apiKey .Values.isaacSim.image.pullSecret }}
       imagePullSecrets:
+        {{- if .Values.ngc.apiKey }}
         - name: ngc-pull-secret
+        {{- end }}
+        {{- if .Values.isaacSim.image.pullSecret }}
+        - name: {{ .Values.isaacSim.image.pullSecret }}
+        {{- end }}
       {{- end }}
       nodeSelector:
         nvidia.com/gpu.product: {{ .Values.isaacSim.gpu.product }}
@@ -32,9 +38,16 @@ spec:
           operator: Exists
           effect: NoSchedule
       securityContext:
-        fsGroup: 1234
+        fsGroup: 0
       containers:
         - name: isaac-sim
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           {{- if eq .Values.app "isaac-lab" }}
           image: {{ .Values.isaacLab.image.repository }}:{{ .Values.isaacLab.image.tag }}
           imagePullPolicy: {{ .Values.isaacLab.image.pullPolicy }}
@@ -43,7 +56,6 @@ spec:
             - -c
             - |
               set -e
-              export OMNI_KIT_ALLOW_ROOT=1
               /isaac-sim/runheadless.sh \
                 --/app/livestream/webrtcEnabled=true \
                 --exec /scripts/{{ .Values.isaacLab.script }}
@@ -101,10 +113,16 @@ spec:
               mountPath: /isaac-sim/.nv/ComputeCache
               subPath: compute-cache
             - name: cache
-              mountPath: /root/.nvidia-omniverse
+              mountPath: /isaac-sim/.nvidia-omniverse
               subPath: nvidia-omniverse
             - name: tmp
               mountPath: /tmp
+            - name: cache-local
+              mountPath: /isaac-sim/.local
+            - name: kit-data
+              mountPath: /isaac-sim/kit/data
+            - name: kit-logs
+              mountPath: /isaac-sim/kit/logs
           readinessProbe:
             tcpSocket:
               port: signaling
@@ -120,7 +138,14 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 6
         - name: tls-proxy
-          image: docker.io/nginx:1.27-alpine
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          image: registry.access.redhat.com/ubi9/nginx-124:latest
           ports:
             - name: signaling-tls
               containerPort: 8443
@@ -133,6 +158,12 @@ spec:
             - name: tls
               mountPath: /etc/nginx/tls
               readOnly: true
+            - name: nginx-tmp
+              mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
           readinessProbe:
             tcpSocket:
               port: signaling-tls
@@ -158,12 +189,24 @@ spec:
         - name: tmp
           emptyDir:
             sizeLimit: 10Gi
+        - name: cache-local
+          emptyDir: {}
+        - name: kit-data
+          emptyDir: {}
+        - name: kit-logs
+          emptyDir: {}
         - name: tls
           secret:
             secretName: coturn-tls
         - name: tls-proxy-conf
           configMap:
             name: tls-proxy-config
+        - name: nginx-tmp
+          emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
