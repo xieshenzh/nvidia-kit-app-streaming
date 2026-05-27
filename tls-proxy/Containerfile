@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi9/nginx-124:latest
+
+USER 0
+RUN dnf install -y --setopt=install_weak_deps=0 --nodocs nginx-mod-stream \
+    && dnf clean all \
+    && rpm -e --nodeps dnf
+USER 1001
+
+CMD ["nginx", "-g", "daemon off;"]

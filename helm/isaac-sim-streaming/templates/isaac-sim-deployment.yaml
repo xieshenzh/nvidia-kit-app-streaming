@@ -44,7 +44,6 @@ spec:
           securityContext:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -145,7 +144,7 @@ spec:
             capabilities:
               drop:
                 - ALL
-          image: registry.access.redhat.com/ubi9/nginx-124:latest
+          image: quay.io/xiezhang7/isaac-sim-tls-proxy:v1
           ports:
             - name: signaling-tls
               containerPort: 8443
@@ -164,6 +163,8 @@ spec:
               mountPath: /var/cache/nginx
             - name: nginx-run
               mountPath: /var/run
+            - name: nginx-log
+              mountPath: /var/log/nginx
           readinessProbe:
             tcpSocket:
               port: signaling-tls
@@ -206,6 +207,8 @@ spec:
         - name: nginx-cache
           emptyDir: {}
         - name: nginx-run
+          emptyDir: {}
+        - name: nginx-log
           emptyDir: {}
 ---
 apiVersion: v1
