@@ -39,6 +39,7 @@ ENV VK_DRIVER_FILES=/etc/vulkan/icd.d/nvidia_icd.json
 
 COPY --from=source --chown=1001:0 /isaac-sim /isaac-sim
 COPY --from=source --chown=1001:0 /workspace/isaaclab /workspace/isaaclab
+RUN chmod g+w /isaac-sim /workspace/isaaclab
 
 USER 1001
 ENV HOME=/isaac-sim
